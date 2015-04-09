@@ -40,7 +40,8 @@ This value containing a number of minute offset into the day seems unlikely.
 
 Extract the `zip` file if needed (the `zip` file came with the git repository).
 
-```{r}
+
+```text
 if(!file.exists("activity.csv")) {
     unzip("activity.zip")
 }
@@ -55,11 +56,10 @@ and report on the mean and median number of steps taken per day.
 
 Aggregate data to find the number of steps taken for each recorded day:
 
-```{r}
 
+```text
 split_by_day <- split(data, data$date)
 total_steps = sapply(split_by_day, function(x) sum(x$steps, na.rm = T) )
-
 ```
 
 <!---
@@ -71,7 +71,8 @@ total_steps = sapply(split_by_day, function(x) sum(x$steps, na.rm = T) )
 
 Plot a histogram of frequency of occurrence of different numbers of steps taken for each recorded day:
 
-```{r}
+
+```text
 # we're going to re-run this one again later so keep it as a function
 
 steps_taken_plot = function() {
@@ -88,11 +89,25 @@ steps_taken_plot = function() {
 steps_taken_plot()
 ```
 
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png) 
+
 Total steps and median steps taken each day:
 
-```{r}
+
+```text
 mean(total_steps)
+```
+
+```
+## [1] 9354.23
+```
+
+```text
 median(total_steps)
+```
+
+```
+## [1] 10395
 ```
 
 ## What is the average daily activity pattern?
@@ -100,7 +115,8 @@ median(total_steps)
 Combine (average) 5 minute interval data for all available days and plot a line graph of these average numbers of steps taken.
 Failing to convert the interval into a timestamp, we number them sequentially.
 
-```{r}
+
+```text
 average_steps_by_interval <- sapply(split(data, data$interval), function(x) mean(x$steps, na.rm=T) )
 
 # so it turns out that the interval number is most likely not a number of minutes offset in to the day
@@ -117,18 +133,30 @@ plot(
     xlab="5 Minute Interval", 
     ylab="Steps Taken (Average Across Day)" 
 )
-
-
 ```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
 
 ## Imputing missing values
 
 Calculate and report the total number of missing values in the dataset:
 
-```{r}
+
+```text
 missing = nrow(data[is.na(data$steps), ])
 missing
+```
+
+```
+## [1] 2304
+```
+
+```text
 missing / nrow(data)  # relative number of missing values
+```
+
+```
+## [1] 0.1311475
 ```
 
 Requirements:
@@ -138,8 +166,10 @@ Create a new dataset that is equal to the original dataset but with the missing 
 Fill in missing values using daily averages for that interval.
 This pulls data from `average_steps_by_interval` to supply missing data into `data_imputed`.
 `data_imputed` starts as a copy of `data`.
+Entries in `average_steps_by_interval` are indexed by the name of the interval (eg `0`, `5`, `10`, etc).
 
-```{r}
+
+```text
 # use average_steps_by_interval from above to supply missing data
 
 # data_imputed starts as a copy of data
@@ -171,7 +201,8 @@ for( i in 1:nrow(data) ) {
 
 This time using the gap-filled data, plot a histogram of frequency of occurrence of different numbers of steps taken for each recorded day:
 
-```{r fig.width=10}
+
+```text
 split_by_day_imputed <- split(data_imputed, data_imputed$date)
 total_steps_imputed = sapply(split_by_day_imputed, function(x) sum(x$steps, na.rm = T) )
 
@@ -187,24 +218,38 @@ hist(
 )
 
 steps_taken_plot()     # display the original, un-gap-filled plot, again
-
 ```
+
+![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
 
 "Calculate and report the mean and median total number of steps taken per day."
 
 Original, uncorrected data is repeated here for comparison, followed by corrected data with missing values estimated:
 
 
-```{r}
+
+```text
 data.frame( 
     uncorrected_mean_daily_steps = mean(total_steps), 
     uncorrected_median_daily_steps = median(total_steps) 
 )
+```
 
+```
+##   uncorrected_mean_daily_steps uncorrected_median_daily_steps
+## 1                      9354.23                          10395
+```
+
+```text
 data.frame( 
     corrected_mean_daily_steps = mean(total_steps_imputed), 
     corrected_median_daily_steps = median(total_steps_imputed) 
 )
+```
+
+```
+##   corrected_mean_daily_steps corrected_median_daily_steps
+## 1                   10766.19                     10766.19
 ```
 
 "Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?"
@@ -224,7 +269,8 @@ Using the gap-filled data, we compare weekend activity to weekday activity.
 
 This is as above for "What is the average daily activity pattern?", but with data for week days and week ends separated and compared.
 
-```{r fig.width=16}
+
+```text
 library(ggplot2)
 
 # "Create a new factor variable in the dataset with two levels -- "weekday" and "weekend"
@@ -262,6 +308,8 @@ qplot(
     ylab = "Total steps taken",
 ) 
 ```
+
+![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
 
 Yes, weekends look different.
 
