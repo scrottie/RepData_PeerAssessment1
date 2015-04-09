@@ -110,6 +110,8 @@ median(total_steps)
 ## [1] 10395
 ```
 
+## Five minute interval with the highest average number of steps
+
 Five minute interval that on average contains the highest number of steps taken each day.
 This was a surprise; I saw it in the grading form but not in the project description.
 
@@ -123,12 +125,23 @@ split_by_interval <- split(data, data$interval)
 interval_by_mean_steps = sapply(split_by_interval, function(x) mean(x$steps, na.rm = T) )
 
 # which interval has the largest mean number of steps?
-names(interval_by_mean_steps)[which.max(interval_by_mean_steps)]
+busiest_interval = names(interval_by_mean_steps)[which.max(interval_by_mean_steps)]
+busiest_interval       # actual name of the interval
 ```
 
 ```
 ## [1] "835"
 ```
+
+```text
+as.numeric(busiest_interval) / 5   # to be consistent with axis on charges
+```
+
+```
+## [1] 167
+```
+
+This corresponds to the sharp peak on the following chart.
 
 
 ## What is the average daily activity pattern?

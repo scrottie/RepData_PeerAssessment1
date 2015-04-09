@@ -258,6 +258,8 @@ steps_taken_plot()
 <pre><code>## [1] 10395
 </code></pre>
 
+<h2>Five minute interval with the highest average number of steps</h2>
+
 <p>Five minute interval that on average contains the highest number of steps taken each day.
 This was a surprise; I saw it in the grading form but not in the project description.</p>
 
@@ -269,11 +271,20 @@ split_by_interval &lt;- split(data, data$interval)
 interval_by_mean_steps = sapply(split_by_interval, function(x) mean(x$steps, na.rm = T) )
 
 # which interval has the largest mean number of steps?
-names(interval_by_mean_steps)[which.max(interval_by_mean_steps)]
+busiest_interval = names(interval_by_mean_steps)[which.max(interval_by_mean_steps)]
+busiest_interval       # actual name of the interval
 </code></pre>
 
 <pre><code>## [1] &quot;835&quot;
 </code></pre>
+
+<pre><code class="text">as.numeric(busiest_interval) / 5   # to be consistent with axis on charges
+</code></pre>
+
+<pre><code>## [1] 167
+</code></pre>
+
+<p>This corresponds to the sharp peak on the following chart.</p>
 
 <h2>What is the average daily activity pattern?</h2>
 
