@@ -12,6 +12,7 @@ Compute various bits of summary data on data collected by a digital pedometer by
 individual between October and November, in 2012.
 
 * Mean, median steps taken per day
+* Surprise bonus:  Which 5 minute interval has the highest average number of steps
 * Number of steps taken in each 5 minute interval, averaged across days
 * Reporting on the total number of missing observations
 * Comparative plots of weekend vs weekday activity by 5 minute interval
@@ -31,7 +32,6 @@ This value containing a number of minute offset into the day seems unlikely.
     date: The date on which the measurement was taken in YYYY-MM-DD format
     interval: Identifier for the 5-minute interval in which measurement was taken
 
-  XXX TODO
   Commit PA1_template.Rmd, PA1_template.md, PA1_template.html and the figure/ directory.
   "If your document has figures included (it should) then they should have been placed in the figure/ directory by default"
 -->
@@ -110,6 +110,27 @@ median(total_steps)
 ## [1] 10395
 ```
 
+Five minute interval that on average contains the highest number of steps taken each day.
+This was a surprise; I saw it in the grading form but not in the project description.
+
+
+```text
+# split data by interval
+split_by_interval <- split(data, data$interval)
+
+# take the mean of all samples (each different day) for that interval
+# after this, names() contains the name of the interval
+interval_by_mean_steps = sapply(split_by_interval, function(x) mean(x$steps, na.rm = T) )
+
+# which interval has the largest mean number of steps?
+names(interval_by_mean_steps)[which.max(interval_by_mean_steps)]
+```
+
+```
+## [1] "835"
+```
+
+
 ## What is the average daily activity pattern?
 
 Combine (average) 5 minute interval data for all available days and plot a line graph of these average numbers of steps taken.
@@ -135,7 +156,7 @@ plot(
 )
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png) 
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png) 
 
 ## Imputing missing values
 
@@ -166,7 +187,6 @@ Create a new dataset that is equal to the original dataset but with the missing 
 Fill in missing values using daily averages for that interval.
 This pulls data from `average_steps_by_interval` to supply missing data into `data_imputed`.
 `data_imputed` starts as a copy of `data`.
-Entries in `average_steps_by_interval` are indexed by the name of the interval (eg `0`, `5`, `10`, etc).
 
 
 ```text
@@ -220,7 +240,7 @@ hist(
 steps_taken_plot()     # display the original, un-gap-filled plot, again
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png) 
+![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png) 
 
 "Calculate and report the mean and median total number of steps taken per day."
 
@@ -309,7 +329,7 @@ qplot(
 ) 
 ```
 
-![plot of chunk unnamed-chunk-10](figure/unnamed-chunk-10-1.png) 
+![plot of chunk unnamed-chunk-11](figure/unnamed-chunk-11-1.png) 
 
 Yes, weekends look different.
 

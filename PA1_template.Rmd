@@ -12,6 +12,7 @@ Compute various bits of summary data on data collected by a digital pedometer by
 individual between October and November, in 2012.
 
 * Mean, median steps taken per day
+* Surprise bonus:  Which 5 minute interval has the highest average number of steps
 * Number of steps taken in each 5 minute interval, averaged across days
 * Reporting on the total number of missing observations
 * Comparative plots of weekend vs weekday activity by 5 minute interval
@@ -31,7 +32,6 @@ This value containing a number of minute offset into the day seems unlikely.
     date: The date on which the measurement was taken in YYYY-MM-DD format
     interval: Identifier for the 5-minute interval in which measurement was taken
 
-  XXX TODO
   Commit PA1_template.Rmd, PA1_template.md, PA1_template.html and the figure/ directory.
   "If your document has figures included (it should) then they should have been placed in the figure/ directory by default"
 -->
@@ -94,6 +94,22 @@ Total steps and median steps taken each day:
 mean(total_steps)
 median(total_steps)
 ```
+
+Five minute interval that on average contains the highest number of steps taken each day.
+This was a surprise; I saw it in the grading form but not in the project description.
+
+```{r}
+# split data by interval
+split_by_interval <- split(data, data$interval)
+
+# take the mean of all samples (each different day) for that interval
+# after this, names() contains the name of the interval
+interval_by_mean_steps = sapply(split_by_interval, function(x) mean(x$steps, na.rm = T) )
+
+# which interval has the largest mean number of steps?
+names(interval_by_mean_steps)[which.max(interval_by_mean_steps)]
+```
+
 
 ## What is the average daily activity pattern?
 
